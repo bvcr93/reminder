@@ -55,7 +55,6 @@ async function CollectionList() {
     },
   });
 
-
   if (collections.length === 0) {
     return (
       <div className="flex flex-col gap-5">
@@ -70,5 +69,10 @@ async function CollectionList() {
     );
   }
 
-  return <></>;
+  return (
+    <>
+      Collections: {collections.length}
+      <CreateCollectionButton />
+    </>
+  );
 }
