@@ -1,3 +1,4 @@
+import CeollectionCard from "@/components/collection-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import CreateCollectionButton from "@/components/ui/create-collection-button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,9 +26,9 @@ async function WelcomMsg() {
   }
 
   return (
-    <div className="flex w-full mb-12">
-      <h1 className="text-4xl font-bold">
-        Welcome, <br /> {user.firstName} {user.lastName}
+    <div className="w-full mb-12 flex items-center justify-center">
+      <h1 className="text-xl md:text-4xl font-bold tracking-wide">
+        Welcome, {user.firstName} {user.lastName}
       </h1>
     </div>
   );
@@ -71,8 +72,12 @@ async function CollectionList() {
 
   return (
     <>
-      Collections: {collections.length}
       <CreateCollectionButton />
+      <div>
+        {collections.map((collection) => (
+          <CeollectionCard key={collection.id} collection={collection} />
+        ))}
+      </div>
     </>
   );
 }

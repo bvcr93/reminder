@@ -8,6 +8,8 @@ export const createCollectionSchema = z.object({
   color: z
     .string()
     .refine((color) => Object.keys(CollectionColors).includes(color)),
+  // Adds a refinement to the color property,
+  // ensuring that the provided color is one of the keys in the CollectionColors object.
 });
 
 export type createCollectionSchemaType = z.infer<typeof createCollectionSchema>;

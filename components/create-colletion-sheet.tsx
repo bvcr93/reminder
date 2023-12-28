@@ -134,7 +134,7 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
                             key={color}
                             value={color}
                             className={cn(
-                              `w-full h-8 rounded-md my-1 text-white focus:text-white focus:font-bold focus:ring-2 ring-neutral-600 focus:ring-inset dark:focus:ring-white focus:px-8`,
+                              `w-full h-8 rounded-md hover:cursor-pointer duration-500 my-1 text-white focus:text-white focus:font-bold focus:ring-2 ring-neutral-600 focus:ring-inset dark:focus:ring-white focus:px-8`,
                               CollectionColors[color as CollectionColor]
                             )}
                           >
