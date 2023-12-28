@@ -1,9 +1,9 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import CreateCollectionButton from "@/components/ui/create-collection-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs";
 import { Suspense } from "react";
-
 export default async function Home() {
   return (
     <>
@@ -55,6 +55,7 @@ async function CollectionList() {
     },
   });
 
+
   if (collections.length === 0) {
     return (
       <div className="flex flex-col gap-5">
@@ -64,6 +65,7 @@ async function CollectionList() {
             Create a collection to get started
           </AlertDescription>
         </Alert>
+        <CreateCollectionButton />
       </div>
     );
   }
