@@ -107,7 +107,7 @@ export default function CeollectionCard({ collection }: Props) {
                     </AlertDialogDescription>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => removeCollection()}>
+                      <AlertDialogAction onClick={() => startTransition(removeCollection)}>
                         Proceed
                       </AlertDialogAction>
                     </AlertDialogFooter>

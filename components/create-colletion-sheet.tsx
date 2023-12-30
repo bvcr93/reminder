@@ -33,7 +33,6 @@ import { CollectionColor, CollectionColors } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-
 import { toast } from "./ui/use-toast";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
@@ -56,7 +55,6 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
     try {
       await createCollection(data);
       console.log(data);
-      // Close the sheet
       openChangeWrapper(false);
       router.refresh();
 
@@ -65,7 +63,6 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
         description: "Collection created successfully!",
       });
     } catch (e: any) {
-      // Show toast
       toast({
         title: "Error",
         description: "Something went wrong. Please try again later",
@@ -135,7 +132,7 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
                             value={color}
                             className={cn(
                               `w-full h-8 rounded-md hover:cursor-pointer duration-500 my-1 text-white focus:text-white focus:font-bold focus:ring-2 ring-neutral-600 focus:ring-inset dark:focus:ring-white focus:px-8`,
-                              CollectionColors[color as CollectionColor]
+                              CollectionColors[color as CollectionColor] 
                             )}
                           >
                             {color}

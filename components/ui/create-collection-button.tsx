@@ -10,13 +10,11 @@ function CreateCollectionBtn() {
   return (
     <div className="w-full my-5 rounded-md bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-[1px]">
       <Button
-        variant={"outline"}
-        className="dark:text-white w-full dark:bg-neutral-950 bg-white"
+        variant={"secondary"}
+        className=" w-full dark:bg-neutral-950 text-slate-200"
         onClick={() => setOpen(true)}
       >
-        <span className="bg-gradient-to-r from-red-500 to-orange-500 hover:to-orange-800 bg-clip-text text-transparent">
-          Create collection
-        </span>
+        Create collection
       </Button>
       <CreateCollectionSheet open={open} onOpenChange={handleOpenChange} />
     </div>

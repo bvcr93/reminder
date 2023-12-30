@@ -55,6 +55,7 @@ async function CollectionList() {
       userId: user?.id,
     },
   });
+  console.log(collections);
 
   if (collections.length === 0) {
     return (
@@ -73,11 +74,9 @@ async function CollectionList() {
   return (
     <>
       <CreateCollectionButton />
-      <div>
-        {collections.map((collection) => (
-          <CeollectionCard key={collection.id} collection={collection} />
-        ))}
-      </div>
+      {collections.map((collection) => (
+        <CeollectionCard key={collection.id} collection={collection} />
+      ))}
     </>
   );
 }
