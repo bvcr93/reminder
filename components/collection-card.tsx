@@ -32,6 +32,7 @@ import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { deleteCollection } from "@/app/actions/collection";
 import CreateTaskDialog from "./create-task-dialog";
+import TaskCard from "./task-card";
 
 interface Props {
   collection: Collection & {
@@ -69,7 +70,7 @@ export default function CeollectionCard({ collection }: Props) {
   const progress = totalTasks === 0 ? 0 : (tasksDone / totalTasks) * 100;
   return (
     <>
-     <CreateTaskDialog
+      <CreateTaskDialog
         open={showCreateModal}
         setOpen={setShowCreateModal}
         collection={collection}
@@ -112,7 +113,7 @@ export default function CeollectionCard({ collection }: Props) {
               <Progress className="rounded-none" value={progress} />
               <div className="p-4 gap-3 flex flex-col">
                 {tasks.map((task) => (
-                  <div key={task.id}>{task.content}</div>
+                  <TaskCard key={task.id} task={task} />
                 ))}
               </div>
             </>

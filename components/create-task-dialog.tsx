@@ -12,6 +12,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import { CollectionColor, CollectionColors } from "@/lib/constants";
 import { useForm } from "react-hook-form";
+import { createTaskSchema, createTaskSchemaType } from "@/schema/createTask";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -28,6 +29,7 @@ import { Calendar } from "./ui/calendar";
 import { Button } from "./ui/button";
 import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import { createTask } from "@/app/actions/task";
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -38,9 +40,38 @@ interface Props {
 }
 
 function CreateTaskDialog({ open, collection, setOpen }: Props) {
+  const form = useForm<createTaskSchemaType>({
+    resolver: zodResolver(createTaskSchema),
+    defaultValues: {
+      collectionId: collection.id,
+    },
+  });
+
+  const router = useRouter();
+
   const openChangeWrapper = (value: boolean) => {
     setOpen(value);
+    form.reset();
   };
+
+  const onSubmit = async (data: createTaskSchemaType) => {
+    try {
+      await createTask(data);
+      toast({
+        title: "Success",
+        description: "Task created successfully!!",
+      });
+      openChangeWrapper(false);
+      router.refresh();
+    } catch (e) {
+      toast({
+        title: "Error",
+        description: "Cannot create task",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={openChangeWrapper}>
       <DialogContent className="sm:max-w-[425px]">
@@ -62,9 +93,13 @@ function CreateTaskDialog({ open, collection, setOpen }: Props) {
           </DialogDescription>
         </DialogHeader>
         <div className="gap-4 py-4">
-          {/* <Form>
-            <form className="space-y-4 flex flex-col">
+          <Form {...form}>
+            <form
+              className="space-y-4 flex flex-col"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
               <FormField
+                control={form.control}
                 name="content"
                 render={({ field }) => (
                   <FormItem>
@@ -81,6 +116,7 @@ function CreateTaskDialog({ open, collection, setOpen }: Props) {
                 )}
               />
               <FormField
+                control={form.control}
                 name="expiresAt"
                 render={({ field }) => (
                   <FormItem>
@@ -118,16 +154,21 @@ function CreateTaskDialog({ open, collection, setOpen }: Props) {
                 )}
               />
             </form>
-          </Form> */}
+          </Form>
         </div>
         <DialogFooter>
           <Button
+            disabled={form.formState.isSubmitting}
             className={cn(
               "w-full dark:text-white text-white",
               CollectionColors[collection.color as CollectionColor]
             )}
+            onClick={form.handleSubmit(onSubmit)}
           >
             Confirm
+            {form.formState.isSubmitting && (
+              <ReloadIcon className="animate-spin h-4 w-4 ml-2" />
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
