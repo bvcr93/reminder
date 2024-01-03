@@ -22,7 +22,7 @@ async function WelcomMsg() {
   const user = await currentUser();
 
   if (!user) {
-    return <div>error</div>;
+    return <div className="text-center">You are not signed in!</div>;
   }
 
   return (
@@ -55,7 +55,6 @@ async function CollectionList() {
       userId: user?.id,
     },
   });
-  console.log(collections);
 
   if (collections.length === 0) {
     return (
