@@ -8,12 +8,7 @@ import { Suspense } from "react";
 export default async function Home() {
   return (
     <>
-      <Suspense fallback={<WelcomeMsgFallback />}>
-        <WelcomMsg />
-      </Suspense>
-      <Suspense fallback={<div>Loading collections...</div>}>
-        <CollectionList />
-      </Suspense>
+      <CollectionList />
     </>
   );
 }
