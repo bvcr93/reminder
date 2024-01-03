@@ -6,27 +6,28 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Collection {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   userId    String
   color     String
   createdAt DateTime @default(now())
-  tasks Task[]
+  tasks     Task[] 
+
   @@unique([name, userId])
 }
 
 model Task {
-  id        Int       @id @default(autoincrement())
-  content   String
-  userId    String
-  done      Boolean   @default(false)
-  expiresAt DateTime?
-  createdAt DateTime  @default(now())
-  collectionId Int
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  content      String
+  userId       String
+  done         Boolean    @default(false)
+  expiresAt    DateTime?
+  createdAt    DateTime   @default(now())
+  collectionId String     @db.ObjectId
   Collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 }
