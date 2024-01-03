@@ -28,13 +28,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
-
 import { toast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { deleteCollection } from "@/app/actions/collection";
+import CreateTaskDialog from "./create-task-dialog";
 
 interface Props {
-  collection: Collection;
+  collection: Collection & {
+    tasks: Task[];
+  };
 }
 export default function CeollectionCard({ collection }: Props) {
   const [isOpen, setIsOpen] = useState(true);
@@ -43,7 +45,7 @@ export default function CeollectionCard({ collection }: Props) {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const [isLoading, startTransition] = useTransition();
-
+  const tasks = collection.tasks;
   const removeCollection = async () => {
     try {
       await deleteCollection(collection.id);
@@ -60,8 +62,18 @@ export default function CeollectionCard({ collection }: Props) {
       });
     }
   };
+  const tasksDone = useMemo(() => {
+    return collection.tasks.filter((task) => task.done).length;
+  }, [collection.tasks]);
+  const totalTasks = collection.tasks.length;
+  const progress = totalTasks === 0 ? 0 : (tasksDone / totalTasks) * 100;
   return (
     <>
+     <CreateTaskDialog
+        open={showCreateModal}
+        setOpen={setShowCreateModal}
+        collection={collection}
+      />
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button
@@ -78,6 +90,33 @@ export default function CeollectionCard({ collection }: Props) {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="flex rounded-b-md flex-col dark:bg-neutral-900 shadow-lg">
+          {tasks.length === 0 && (
+            <Button
+              variant={"ghost"}
+              className="flex items-center justify-center gap-1 p-8 py-12 rounded-none"
+              onClick={() => setShowCreateModal(true)}
+            >
+              <p>There are no tasks yet:</p>
+              <span
+                className={cn(
+                  "text-sm bg-clip-text text-transparent",
+                  CollectionColors[collection.color as CollectionColor]
+                )}
+              >
+                Create one
+              </span>
+            </Button>
+          )}
+          {tasks.length > 0 && (
+            <>
+              <Progress className="rounded-none" value={progress} />
+              <div className="p-4 gap-3 flex flex-col">
+                {tasks.map((task) => (
+                  <div key={task.id}>{task.content}</div>
+                ))}
+              </div>
+            </>
+          )}
           <Separator />
           <footer className="h-[40px] px-4 p-[2px] text-xs text-neutral-500 flex justify-between items-center ">
             <p>Created at {collection.createdAt.toLocaleDateString("en-US")}</p>
@@ -107,7 +146,9 @@ export default function CeollectionCard({ collection }: Props) {
                     </AlertDialogDescription>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => startTransition(removeCollection)}>
+                      <AlertDialogAction
+                        onClick={() => startTransition(removeCollection)}
+                      >
                         Proceed
                       </AlertDialogAction>
                     </AlertDialogFooter>
